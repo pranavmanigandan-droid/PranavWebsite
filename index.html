@@ -1,0 +1,127 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pranav Manigandan</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="ocean-background">
+  <div id="fish-container"></div>
+</div>
+
+<header class="hero">
+  <div class="hero-content">
+    <img class="profile-pic" src="https://via.placeholder.com/140" alt="Pranav Manigandan Profile Picture" loading="lazy" />
+    <div class="hero-text">
+      <h1>Pranav Manigandan</h1>
+      <p class="subtitle">Student Developer</p>
+      <p class="intro">
+        Welcome to my professional portfolio. Just like the ocean, technology is vast and full of mystery. 
+        I enjoy diving deep into programming to surface with creative solutions.
+      </p>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <a href="#about">About</a>
+  <a href="#projects">Projects</a>
+  <a href="#skills">Skills</a>
+  <a href="#experience">Growth</a>
+  <a href="#game">Deep Sea Game</a>
+  <a href="#important_stuff">Video</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<main class="container">
+  <section id="about">
+    <h2>About Me</h2>
+    <p>
+      My name is Pranav Manigandan. I am a student interested in STEM, Robotics, and coding. 
+      I build projects that combine logic with coding.
+    </p>
+  </section>
+
+  <section id="projects">
+    <h2>Featured Projects</h2>
+    <div class="project-grid">
+      <article class="project-card">
+        <h3>Scratch Marine Logic</h3>
+        <p>An interactive logic game designed with custom sprites and fluid movement.</p>
+        <a href="#">View Project</a>
+      </article>
+      <article class="project-card">
+        <h3>Python Automation</h3>
+        <p>A script built to handle complex data, much like mapping the ocean floor.</p>
+        <a href="#">View Project</a>
+      </article>
+      <article class="project-card">
+        <h3>Deep Sea Defense</h3>
+        <p>A JavaScript game featuring a submarine defending the coral reef from jellyfish.</p>
+        <a href="#game">Play Below</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills-list">
+      <span>Python</span><span>Robotics</span><span>STEM</span><span>Debugging</span>
+      <span>Problem Solving</span><span>UI Design</span><span>Badminton</span>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience and Growth</h2>
+    <div class="resume-box">
+      <h3>Highlights</h3>
+      <ul>
+        <li>Mastered HTML/CSS layouts for professional presentation</li>
+        <li>Developed game logic algorithms using JavaScript</li>
+        <li>Collaborated on STEM projects involving robotics and hardware</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="game">
+    <h2>Deep Sea Defense</h2>
+    <div id="game-wrap">
+        <div id="ui">
+            <span>TREASURE: <b id="score-val">0</b></span>
+            <span id="game-msg">DIVE READY</span>
+        </div>
+        <div class="diff-control">
+            <label for="diff-slider">Depth Level:</label>
+            <input type="range" id="diff-slider" min="1" max="5" value="2">
+            <span id="diff-label">Guardian</span>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <p class="instr">Move: <b>ARROWS</b> | Bubbles: <b>SPACE</b></p>
+        <button id="start-btn">Dive into Mission</button>
+    </div>
+  </section>
+
+  <section id="important_stuff">
+    <h2>Featured Content</h2>
+    <p><a href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Watch My Video</a></p>
+      </iframe>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact & Future Goals</h2>
+    <p>I aim to explore more advanced AI and software engineering as I continue my journey.</p>
+    <p><strong>Email:</strong> <a href="mailto:pranav_manigandan@s.thevillageschool.com">pranav_manigandan@s.thevillageschool.com</a></p>
+  </section>
+</main>
+
+<footer>
+  <p>Designed by Pranav Manigandan | 2026 Student Portfolio</p>
+</footer>
+
+<script src="assets/script.js"></script>
+
+</body>
+</html>
