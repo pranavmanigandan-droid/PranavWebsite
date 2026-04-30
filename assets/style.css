@@ -1,0 +1,450 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    position: relative;
+    color: #004d40;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.ocean-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, 
+        #e0f7fa 0%,    /* Top: Light Sunlight */
+        #00acc1 20%,   /* Shallow Reef */
+        #006064 50%,   /* Deep Twilight */
+        #002f35 80%,   /* Midnight Abyss */
+        #000d0f 100%   /* The Trench */
+    );
+    background-attachment: fixed;
+    z-index: 0;
+    pointer-events: none;
+}
+
+#fish-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.fish {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.fish-svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.fish.swim-right {
+    animation: swimRight linear infinite;
+}
+
+.fish.swim-left {
+    animation: swimLeft linear infinite;
+    transform: scaleX(-1);
+}
+
+@keyframes swimRight {
+    from { left: -60px; }
+    to { left: 100vw; }
+}
+
+@keyframes swimLeft {
+    from { left: 100vw; }
+    to { left: -60px; }
+}
+
+.hero {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, #006064, #00acc1);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero .subtitle {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #e0f7fa;
+}
+
+.hero .intro {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #b2ebf2;
+}
+
+.hero-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid #80deea;
+    object-fit: cover;
+}
+
+nav {
+    background: #00838f;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 102;
+}
+
+nav a {
+    color: #e0f7fa;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+    transition: color 0.3s;
+}
+
+nav a:hover { color: #fff; }
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* KEEPING TEXT BOXES WHITE/TEAL AS REQUESTED */
+section {
+    background: rgba(255, 255, 255, 0.95);
+    margin-bottom: 30px;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-bottom: 5px solid #b2ebf2;
+    border-left: 4px solid #00acc1;
+    transition: all 0.3s ease;
+}
+
+section:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+h2 { 
+    color: #00838f; 
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    border-bottom: 3px solid #b2ebf2;
+    padding-bottom: 10px;
+}
+
+.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+
+/* KEEPING CARD COLORS AS REQUESTED */
+.project-card { 
+    background: linear-gradient(135deg, #f0fdfa 0%, #e0f7fa 100%);
+    border: 2px solid #80deea; 
+    border-radius: 15px; 
+    padding: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 172, 193, 0.15);
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 172, 193, 0.3);
+    border-color: #00acc1;
+}
+
+.project-card h3 {
+    color: #00838f;
+    margin-bottom: 10px;
+}
+
+.project-card a {
+    display: inline-block;
+    color: #00acc1;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: rgba(0, 172, 193, 0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.project-card a:hover {
+    background: #00acc1;
+    color: white;
+}
+
+.skills-list { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+}
+
+.skills-list span { 
+    background: linear-gradient(135deg, #00acc1, #0097a7);
+    color: white; 
+    padding: 10px 18px; 
+    border-radius: 50px; 
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0, 172, 193, 0.3);
+    transition: all 0.3s ease;
+}
+
+.skills-list span:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 172, 193, 0.4);
+}
+
+/* --- THE SEAFLOOR --- */
+footer {
+    background: linear-gradient(to top, #d2b48c, #c2a278); /* Sandy color */
+    color: #3e2723; /* Dark brown text for contrast on sand */
+    padding: 60px 20px;
+    text-align: center;
+    border-top: 15px solid #b29168;
+    position: relative;
+    /* This makes the seafloor look "wavy" at the top */
+    clip-path: polygon(0 15%, 10% 0, 25% 12%, 40% 3%, 60% 15%, 75% 5%, 90% 12%, 100% 0, 100% 100%, 0 100%);
+    z-index: 2;
+}
+
+footer a {
+    color: #5d4037;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 2px solid #5d4037;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: #795548;
+    border-bottom-color: #795548;
+}
+
+/* --- OCEAN GAME THEME --- */
+#game-wrap {
+    background: linear-gradient(145deg, #0f172a, #1e3a8a);
+    color: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    max-width: 100%;
+    margin: 20px auto;
+    font-family: 'Courier New', Courier, monospace;
+    border: 2px solid rgba(96, 165, 250, 0.3);
+}
+
+canvas {
+    background: linear-gradient(135deg, #020617 0%, #0d1b2a 100%);
+    border: 3px solid #60a5fa;
+    display: block;
+    margin: 15px auto 0;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    aspect-ratio: 3 / 5;
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+#ui { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 15px; 
+    font-size: 1rem; 
+    font-weight: bold;
+    background: rgba(96, 165, 250, 0.1);
+    padding: 12px;
+    border-radius: 10px;
+    border-left: 4px solid #60a5fa;
+}
+#game-msg {
+    color: #fbbf24;
+    font-size: 1.1rem;
+}
+.diff-control { 
+    background: rgba(96, 165, 250, 0.15); 
+    padding: 12px; 
+    border-radius: 10px; 
+    margin-bottom: 15px; 
+    font-size: 0.9rem;
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.diff-control label {
+    font-weight: 600;
+}
+.diff-control #diff-label {
+    font-weight: bold;
+    color: #60a5fa;
+}
+input[type=range] { 
+    accent-color: #60a5fa; 
+    width: 150px;
+    cursor: pointer;
+}
+
+#start-btn {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    border: 2px solid #60a5fa;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    transition: all 0.3s ease;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#start-btn:hover { 
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    box-shadow: 0 8px 25px rgba(96, 165, 250, 0.6);
+    transform: translateY(-2px);
+}
+#start-btn:active { 
+    transform: translateY(0px);
+    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
+}
+#start-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.instr { 
+    text-align: center; 
+    margin-top: 15px; 
+    font-size: 0.9rem; 
+    color: #a0aec0;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #60a5fa;
+}
+
+/* --- Mouse Bubble Trail --- */
+.bubble {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: floatUp 2s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 0.8; }
+    100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+}
+
+/* --- RESUME BOX STYLING --- */
+.resume-box {
+    background: linear-gradient(135deg, rgba(0, 172, 193, 0.1), rgba(0, 188, 212, 0.1));
+    border-left: 5px solid #00acc1;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.resume-box h3 {
+    color: #00838f;
+    margin-bottom: 15px;
+}
+
+.resume-box ul {
+    list-style: none;
+}
+
+.resume-box li {
+    padding: 8px 0;
+    padding-left: 25px;
+    position: relative;
+    color: #004d40;
+}
+
+.resume-box li:before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: #00acc1;
+    font-size: 1.2em;
+}
+
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    #game-wrap {
+        padding: 15px;
+    }
+    
+    .diff-control {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    input[type=range] {
+        width: 100%;
+    }
+    
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    nav a {
+        margin: 0 5px;
+        font-size: 0.9rem;
+    }
+    
+    h2 {
+        font-size: 1.4rem;
+    }
+}
