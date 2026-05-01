@@ -118,9 +118,6 @@ function resizeCanvas() {
     const aspectRatio = 3 / 5;
     canvas.width = maxWidth;
     canvas.height = maxWidth * aspectRatio;
-    // Recalculate submarine position
-    submarine.y = canvas.height - 40;
-    submarine.x = canvas.width / 2 - submarine.w / 2;
 }
 
 resizeCanvas();
@@ -134,7 +131,7 @@ let moveDirection = 1;
 let swimSpeed = 1;
 const keys = {};
 
-const submarine = { x: 135, y: 460, w: 30, h: 18, speed: 5 };
+const submarine = { x: 0, y: 0, w: 30, h: 18, speed: 5 };
 const levels = ["Reef", "Shallows", "Abyss", "Trench", "Midnight"];
 
 diffSlider.oninput = () => { diffLabel.innerText = levels[diffSlider.value - 1]; };
@@ -209,11 +206,10 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Draw Submarine (Yellow)
+    // Draw Submarine (Yellow) - using fillRect instead of roundRect for better browser compatibility
     ctx.fillStyle = '#facc15';
-    ctx.beginPath();
-    ctx.roundRect(submarine.x, submarine.y, submarine.w, submarine.h, 5);
-    ctx.fill();
+    ctx.fillRect(submarine.x, submarine.y, submarine.w, submarine.h);
+    
     // Submarine periscope
     ctx.fillRect(submarine.x + 20, submarine.y - 5, 4, 5);
 
@@ -252,9 +248,19 @@ function endGame(msg) {
 }
 
 startBtn.onclick = () => {
-    score = 0; scoreVal.innerText = score; gameMsg.innerText = "";
-    bubbles = []; gameActive = true; startBtn.disabled = true;
-    initJellyfish(); draw();
+    score = 0; 
+    scoreVal.innerText = score; 
+    gameMsg.innerText = "";
+    bubbles = []; 
+    gameActive = true; 
+    startBtn.disabled = true;
+    
+    // Initialize submarine position based on actual canvas size
+    submarine.x = canvas.width / 2 - submarine.w / 2;
+    submarine.y = canvas.height - 40;
+    
+    initJellyfish(); 
+    draw();
 };
 
 // --- BUBBLE TRAIL LOGIC ---
