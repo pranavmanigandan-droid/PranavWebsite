@@ -102,19 +102,17 @@ for (let i = 0; i < 3; i++) {
     createFish();
 }
 
-// === GAME CODE ===
+// === SPACE INVADERS GAME ===
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreVal = document.getElementById('score-val');
 const gameMsg = document.getElementById('game-msg');
 const startBtn = document.getElementById('start-btn');
-const diffSlider = document.getElementById('diff-slider');
-const diffLabel = document.getElementById('diff-label');
 
-// Set canvas dimensions responsively - SMALLER SIZE
+// Set canvas dimensions responsively
 function resizeCanvas() {
     const container = canvas.parentElement;
-    const maxWidth = Math.min(400, container.clientWidth - 40);
+    const maxWidth = Math.min(600, container.clientWidth - 40);
     const aspectRatio = 3 / 5;
     canvas.width = maxWidth;
     canvas.height = maxWidth * aspectRatio;
@@ -125,39 +123,33 @@ window.addEventListener('resize', resizeCanvas);
 
 let score = 0;
 let gameActive = false;
-let bubbles = []; // Formerly bullets
-let jellyfish = []; // Formerly invaders
-let moveDirection = 1;
-let swimSpeed = 1;
+let bullets = [];
+let enemies = [];
 let gameLoopId = null;
 const keys = {};
 
-const submarine = { x: 0, y: 0, w: 30, h: 18, speed: 5 };
-const levels = ["Reef", "Shallows", "Abyss", "Trench", "Midnight"];
-
-diffSlider.oninput = () => { diffLabel.innerText = levels[diffSlider.value - 1]; };
+const player = { x: 0, y: 0, w: 30, h: 30, speed: 6 };
 
 window.addEventListener('keydown', e => {
     if (["Space", "ArrowLeft", "ArrowRight"].includes(e.code)) e.preventDefault();
     keys[e.code] = true;
-    if (e.code === 'Space' && gameActive) releaseBubble();
+    if (e.code === 'Space' && gameActive) shootBullet();
 });
 window.addEventListener('keyup', e => keys[e.code] = false);
 
-function releaseBubble() {
-    if (bubbles.length < 5) {
-        bubbles.push({ x: submarine.x + 13, y: submarine.y, r: 4 }); // Bubbles are round
+function shootBullet() {
+    if (bullets.length < 8) {
+        bullets.push({ x: player.x + player.w / 2 - 2, y: player.y, w: 4, h: 12 });
     }
 }
 
-function initJellyfish() {
-    jellyfish = [];
-    const level = parseInt(diffSlider.value);
-    const rows = 2 + level; 
-    const cols = 3;
+function initEnemies() {
+    enemies = [];
+    const cols = 5;
+    const rows = 3;
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-            jellyfish.push({ x: c * 35 + 40, y: r * 30 + 50, w: 20, h: 20, alive: true });
+            enemies.push({ x: c * 80 + 40, y: r * 60 + 20, w: 35, h: 30, alive: true });
         }
     }
 }
@@ -165,73 +157,71 @@ function initJellyfish() {
 function update() {
     if (!gameActive) return;
 
-    // Movement: Submarine
-    if (keys['ArrowLeft'] && submarine.x > 0) submarine.x -= submarine.speed;
-    if (keys['ArrowRight'] && submarine.x < canvas.width - submarine.w) submarine.x += submarine.speed;
+    // Player movement
+    if (keys['ArrowLeft'] && player.x > 0) player.x -= player.speed;
+    if (keys['ArrowRight'] && player.x < canvas.width - player.w) player.x += player.speed;
 
-    // Movement: Bubbles (Float up)
-    bubbles.forEach((b, i) => { 
-        b.y -= 6; 
-        if (b.y < 0) bubbles.splice(i, 1); 
+    // Bullets movement
+    bullets = bullets.filter(b => {
+        b.y -= 8;
+        return b.y > 0;
     });
 
-    // Movement: Jellyfish
+    // Enemies movement
     let hitEdge = false;
-    jellyfish.forEach(j => {
-        if (!j.alive) return;
-        j.x += moveDirection * swimSpeed;
-        if (j.x + j.w > canvas.width - 5 || j.x < 5) hitEdge = true;
-        if (j.y + j.h >= submarine.y) endGame("HULL BREACHED");
+    enemies.forEach(e => {
+        if (!e.alive) return;
+        e.x += e.direction;
+        if (e.x <= 0 || e.x + e.w >= canvas.width) hitEdge = true;
+        if (e.y + e.h >= canvas.height - 40) endGame("GAME OVER");
     });
 
     if (hitEdge) {
-        moveDirection *= -1;
-        jellyfish.forEach(j => j.y += 12);
+        enemies.forEach(e => {
+            e.direction *= -1;
+            e.y += 30;
+        });
     }
 
-    // Collision Logic
-    bubbles.forEach((b, bIdx) => {
-        jellyfish.forEach(j => {
-            if (j.alive && b.x > j.x && b.x < j.x + j.w && b.y > j.y && b.y < j.y + j.h) {
-                j.alive = false;
-                bubbles.splice(bIdx, 1);
-                score += 15;
+    // Collision detection
+    bullets.forEach((b, bIdx) => {
+        enemies.forEach(e => {
+            if (e.alive && 
+                b.x < e.x + e.w && 
+                b.x + b.w > e.x && 
+                b.y < e.y + e.h && 
+                b.y + b.h > e.y) {
+                e.alive = false;
+                bullets.splice(bIdx, 1);
+                score += 10;
                 scoreVal.innerText = score;
             }
         });
     });
 
-    if (jellyfish.length > 0 && jellyfish.every(j => !j.alive)) endGame("REEF SAVED!");
+    // Check if all enemies defeated
+    if (enemies.length > 0 && enemies.every(e => !e.alive)) endGame("YOU WIN!");
 }
 
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Draw Submarine (Yellow) - using fillRect instead of roundRect for better browser compatibility
-    ctx.fillStyle = '#facc15';
-    ctx.fillRect(submarine.x, submarine.y, submarine.w, submarine.h);
+    // Draw player (green rectangle)
+    ctx.fillStyle = '#00ff00';
+    ctx.fillRect(player.x, player.y, player.w, player.h);
     
-    // Submarine periscope
-    ctx.fillRect(submarine.x + 20, submarine.y - 5, 4, 5);
-
-    // Draw Bubbles (White Circles)
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    bubbles.forEach(b => {
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fill();
+    // Draw bullets (white rectangles)
+    ctx.fillStyle = '#ffffff';
+    bullets.forEach(b => {
+        ctx.fillRect(b.x, b.y, b.w, b.h);
     });
 
-    // Draw Jellyfish (Pink/Coral with glow)
-    jellyfish.forEach(j => {
-        if (j.alive) {
-            ctx.fillStyle = '#ff80ab';
-            ctx.beginPath();
-            ctx.arc(j.x + 10, j.y + 10, 10, Math.PI, 0); // Domed head
-            ctx.fill();
-            ctx.fillRect(j.x + 5, j.y + 10, 2, 18); // Tentacles
-            ctx.fillRect(j.x + 10, j.y + 10, 2, 20);
-            ctx.fillRect(j.x + 15, j.y + 10, 2, 18);
+    // Draw enemies (red rectangles)
+    ctx.fillStyle = '#ff0000';
+    enemies.forEach(e => {
+        if (e.alive) {
+            ctx.fillRect(e.x, e.y, e.w, e.h);
         }
     });
 
@@ -245,46 +235,43 @@ function endGame(msg) {
     gameActive = false;
     gameMsg.innerText = msg;
     startBtn.disabled = false;
-    startBtn.innerText = "Surface & Retry";
+    startBtn.innerText = "Play Again";
     if (gameLoopId) cancelAnimationFrame(gameLoopId);
 }
 
 startBtn.onclick = () => {
-    score = 0; 
-    scoreVal.innerText = score; 
+    score = 0;
+    scoreVal.innerText = score;
     gameMsg.innerText = "";
-    bubbles = []; 
-    gameActive = true; 
+    bullets = [];
+    gameActive = true;
     startBtn.disabled = true;
     
-    // Initialize submarine position based on actual canvas size
-    submarine.x = canvas.width / 2 - submarine.w / 2;
-    submarine.y = canvas.height - 40;
+    player.x = canvas.width / 2 - player.w / 2;
+    player.y = canvas.height - 50;
     
-    initJellyfish(); 
+    initEnemies();
+    enemies.forEach(e => e.direction = 2);
+    
     draw();
 };
 
 // --- BUBBLE TRAIL LOGIC ---
 document.addEventListener('mousemove', (e) => {
-    // Only create a bubble occasionally to save performance
-    if (Math.random() > 0.5) return; 
+    if (Math.random() > 0.5) return;
 
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
     
-    // Random size for variety
     const size = Math.random() * 15 + 5 + "px";
     bubble.style.width = size;
     bubble.style.height = size;
 
-    // Position at cursor
     bubble.style.left = e.clientX + "px";
     bubble.style.top = e.clientY + "px";
 
     document.body.appendChild(bubble);
 
-    // Clean up the element after animation ends
     setTimeout(() => {
         bubble.remove();
     }, 2000);
