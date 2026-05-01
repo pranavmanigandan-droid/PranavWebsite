@@ -111,10 +111,10 @@ const startBtn = document.getElementById('start-btn');
 const diffSlider = document.getElementById('diff-slider');
 const diffLabel = document.getElementById('diff-label');
 
-// Set canvas dimensions responsively
+// Set canvas dimensions responsively - SMALLER SIZE
 function resizeCanvas() {
     const container = canvas.parentElement;
-    const maxWidth = Math.min(600, container.clientWidth - 40);
+    const maxWidth = Math.min(400, container.clientWidth - 40);
     const aspectRatio = 3 / 5;
     canvas.width = maxWidth;
     canvas.height = maxWidth * aspectRatio;
@@ -129,6 +129,7 @@ let bubbles = []; // Formerly bullets
 let jellyfish = []; // Formerly invaders
 let moveDirection = 1;
 let swimSpeed = 1;
+let gameLoopId = null;
 const keys = {};
 
 const submarine = { x: 0, y: 0, w: 30, h: 18, speed: 5 };
@@ -236,7 +237,7 @@ function draw() {
 
     if (gameActive) {
         update();
-        requestAnimationFrame(draw);
+        gameLoopId = requestAnimationFrame(draw);
     }
 }
 
@@ -245,6 +246,7 @@ function endGame(msg) {
     gameMsg.innerText = msg;
     startBtn.disabled = false;
     startBtn.innerText = "Surface & Retry";
+    if (gameLoopId) cancelAnimationFrame(gameLoopId);
 }
 
 startBtn.onclick = () => {
